@@ -10,6 +10,5 @@ export default defineConfig({
   output: 'server',
   site: 'https://unsplash-api-astro.vercel.app',
   integrations: [tailwind(), sitemap()],
-
   adapter: vercel()
 });
