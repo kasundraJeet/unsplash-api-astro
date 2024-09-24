@@ -42,6 +42,7 @@ const photos = response.results;
     {
       photos.length > 0 ? (
         <ul class="image-grid">
+          <li class="grid-sizer" />
           {photos.map((photo) => (
             <li class="grid-item">
               <img src={photo.urls.small} alt={photo.alt_description} />
@@ -58,16 +59,21 @@ const photos = response.results;
 </Layout>
 
 <script>
+  import imagesLoaded from "imagesloaded";
   import Masonry from "masonry-layout";
   document.addEventListener("DOMContentLoaded", function () {
-    var elem = document.querySelector(".image-grid");
-    if (elem) {
-      var msnry = new Masonry(elem, {
-        itemSelector: ".grid-item",
-        columnWidth: ".grid-item",
-        percentPosition: true,
-      });
-    }
+    const elem = document.querySelector(".image-grid");
+    const imgLoad = imagesLoaded(elem);
+
+    imgLoad.on("progress", function () {
+      if (elem) {
+        new Masonry(elem, {
+          itemSelector: ".grid-item",
+          columnWidth: ".grid-sizer",
+          percentPosition: true,
+        });
+      }
+    });
   });
 </script>
 
@@ -101,6 +107,11 @@ const photos = response.results;
   }
 
   .image-grid {
-    @apply grid grid-cols-3 gap-4;
+    @apply relative;
+  }
+
+  .grid-sizer,
+  .grid-item {
+    @apply w-1/3 my-2;
   }
 </style>
