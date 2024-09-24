@@ -2,57 +2,45 @@
 import Layout from "../layouts/Layout.astro";
 import { fetchUnsplashPhotos } from "./api/index";
 
-let photos = [];
-let query = "nature";
-
-
-async function fetchDefaultPhotos() {
-  photos = await fetchUnsplashPhotos(query);
-}
-
-
-fetchDefaultPhotos();
-
-
-async function handleSubmit(event) {
-  event.preventDefault();
-  query = event.target.elements.query.value;
-  photos = await fetchUnsplashPhotos(query);
-}
+let query = Astro.url.searchParams.get("query") || "";
+const response = await fetchUnsplashPhotos(query);
+const photos = response.results;
 ---
 
 <Layout>
   <section class="my-container py-24 space-y-14">
     <div class="space-y-7">
-      <h1>unsplash api image collection</h1>
-      <h2>Project by - kasundra jeet</h2>
+      <h1>Unsplash API Image Collection</h1>
+      <h2>Project by - Kasundra Jeet</h2>
     </div>
+
     <div class="space-y-4">
-      <form class="from-control" on:submit={handleSubmit}>
+      <form class="from-control" method="GET" action="/">
         <div class="from-input">
-          <input type="text" name="query" placeholder="Search Something" />
+          <input
+            type="text"
+            name="query"
+            placeholder="Search Something"
+            value={query}
+          />
         </div>
         <button type="submit">Search</button>
       </form>
+
       <ul class="flex items-center justify-center gap-1">
+        <li><p class="font-bold mr-1">Popular:</p></li>
+        <li><a href="/?query=neutral" class="popular-link">Neutral,</a></li>
         <li>
-          <p class="font-bold mr-1">Popular:</p>
+          <a href="/?query=motivational" class="popular-link">Motivational,</a>
         </li>
-        <li>
-          <a href="/" class="popular-link">neutral,</a>
-        </li>
-        <li>
-          <a href="/" class="popular-link">motivational,</a>
-        </li>
-        <li>
-          <a href="/" class="popular-link">Dark</a>
-        </li>
+        <li><a href="/?query=dark" class="popular-link">Dark</a></li>
       </ul>
     </div>
   </section>
-  {
-    photos.length > 0 && (
-      <section class="my-container py-6">
+
+  <section class="my-container py-6">
+    {
+      photos.length > 0 ? (
         <ul class="image-grid">
           {photos.map((photo) => (
             <li class="grid-item">
@@ -60,20 +48,26 @@ async function handleSubmit(event) {
             </li>
           ))}
         </ul>
-      </section>
-    )
-  }
+      ) : (
+        <p class="text-center text-base">
+          No results found for <span class="font-bold">"{query}"</span>.
+        </p>
+      )
+    }
+  </section>
 </Layout>
 
 <script>
   import Masonry from "masonry-layout";
   document.addEventListener("DOMContentLoaded", function () {
     var elem = document.querySelector(".image-grid");
-    var msnry = new Masonry(elem, {
-      itemSelector: ".grid-item",
-      columnWidth: ".grid-item",
-      percentPosition: true,
-    });
+    if (elem) {
+      var msnry = new Masonry(elem, {
+        itemSelector: ".grid-item",
+        columnWidth: ".grid-item",
+        percentPosition: true,
+      });
+    }
   });
 </script>
 
@@ -107,6 +101,6 @@ async function handleSubmit(event) {
   }
 
   .image-grid {
-    @apply grid grid-cols-3;
+    @apply grid grid-cols-3 gap-4;
   }
 </style>

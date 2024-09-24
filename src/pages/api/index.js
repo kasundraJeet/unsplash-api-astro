@@ -3,7 +3,7 @@ import axios from "axios";
 const accessKey = import.meta.env.ACCESS_KEY;
 
 export async function fetchUnsplashPhotos(query) {
-  const url = `https://api.unsplash.com/search/photos?query=${query}`;
+  const url = `https://api.unsplash.com/search/photos?page=1&query=${query}`;
 
   try {
     const response = await axios.get(url, {
@@ -12,7 +12,7 @@ export async function fetchUnsplashPhotos(query) {
       },
     });
 
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching photos:", error);
     return [];
