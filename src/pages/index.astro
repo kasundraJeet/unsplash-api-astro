@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from "../layouts/Layout.astro";
 import { fetchUnsplashPhotos } from "./api/index";
 
@@ -40,18 +41,19 @@ const photos = response.results;
 
   <section class="my-container py-6">
     {
-      photos.length > 0 ? (
+      photos && photos.length > 0 ? (
         <ul class="image-grid">
           <li class="grid-sizer" />
           {photos.map((photo) => (
             <li class="grid-item">
-              <img src={photo.urls.small} alt={photo.alt_description} />
+              <Image src={photo.urls.small} alt={photo.alt_description} inferSize={true} />
             </li>
           ))}
         </ul>
       ) : (
         <p class="text-center text-base">
-          No results found for <span class="font-bold">"{query}"</span>.
+          No results found for{" "}
+          <span class="font-bold">"{query || "nothing"}"</span>.
         </p>
       )
     }
