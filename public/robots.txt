@@ -1,5 +1,2 @@
 User-agent: *
-Disallow: \
-Allow: /
-
-Sitemap: https://unsplash-api-astro.vercel.app/sitemap.xml
+Disallow: /

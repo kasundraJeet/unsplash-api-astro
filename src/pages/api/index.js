@@ -14,7 +14,6 @@ export async function fetchUnsplashPhotos(query) {
 
     return response.data;
   } catch (error) {
-    console.error("Error fetching photos:", error);
     return [];
   }
 }
