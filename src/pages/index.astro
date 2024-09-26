@@ -4,8 +4,8 @@ import Layout from "../layouts/Layout.astro";
 import { fetchUnsplashPhotos } from "./api/index";
 
 let query = Astro.url.searchParams.get("query") || "";
-const response = await fetchUnsplashPhotos(query);
-const photos = response.results;
+const response = await fetchUnsplashPhotos(query ? query : null);
+const photos =  query ? response.results : response;
 ---
 
 <Layout>
