@@ -2,7 +2,7 @@ import axios from "axios";
 
 const accessKey = import.meta.env.ACCESS_KEY;
 
-export async function fetchUnsplashPhotos(query , page) {
+export async function fetchUnsplashPhotos(query, page) {
   let url;
   if (query) {
     url = `https://api.unsplash.com/search/photos?page=${page}&query=${query}`;
